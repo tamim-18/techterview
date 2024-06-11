@@ -8,20 +8,20 @@ import { usePathname } from "next/navigation";
 function Header() {
   const pathname = usePathname();
   return (
-    <div className=" flex p-4 items-center justify-between">
+    <div className=" flex p-4 items-center justify-between bg-secondary shadow-sm h-[96px]">
       <Link href="/">
         <Image src="/logoTech.png" alt="TechTerview" width={160} height={100} />
       </Link>
-      <ul className="flex gap-4 items-center p-4 ">
-        <Link href="/questions">
+      <ul className=" hidden md:flex gap-4 items-center p-4 ">
+        <Link href="/dashboard">
           <li
             className={`font-mono font-bold text-blue-600 hover:text-cyan-500 px-3 py-2 rounded ${
-              pathname === "/questions"
+              pathname === "/dashboard"
                 ? "custom-underline custom-underline-transition"
                 : "transition-all duration-300 ease-in-out"
             }`}
           >
-            Questions
+            Dashboard
           </li>
         </Link>
         <Link href="/interviews">
@@ -35,26 +35,26 @@ function Header() {
             Interviews
           </li>
         </Link>
-        <Link href="/feedback">
+        <Link href="/questions">
           <li
             className={`font-mono font-bold text-blue-600 hover:text-cyan-500 px-3 py-2 rounded ${
-              pathname === "/feedback"
+              pathname === "/questions"
                 ? "custom-underline custom-underline-transition"
                 : "transition-all duration-300 ease-in-out"
             }`}
           >
-            Feedback
+            Questions
           </li>
         </Link>
-        <Link href="/settings">
+        <Link href="/about-us">
           <li
             className={`font-mono font-bold text-blue-600 hover:text-cyan-500 px-3 py-2 rounded ${
-              pathname === "/settings"
+              pathname === "/about-us"
                 ? "custom-underline custom-underline-transition"
                 : "transition-all duration-300 ease-in-out"
             }`}
           >
-            Settings
+            About Us
           </li>
         </Link>
       </ul>
