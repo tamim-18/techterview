@@ -9,18 +9,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Ghost } from "lucide-react";
+import { Ghost, Loader2Icon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { chatSession } from "@/utils/GeminiAI";
+import { json } from "drizzle-orm/mysql-core";
+import { set } from "date-fns";
 
 const AddInterview = () => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [jobTitle, setJobTitle] = React.useState();
-  const [jobDescription, setJobDescription] = React.useState();
-  const [experience, setExperience] = React.useState();
+  const [jobTitle, setJobTitle] = React.useState("");
+  const [jobDescription, setJobDescription] = React.useState("");
+  const [experience, setExperience] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const onSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault(); // Prevent the default form submission behavior
     console.log(jobTitle, jobDescription, experience);
 
@@ -36,6 +40,16 @@ const AddInterview = () => {
     // This is just for demonstration, replace with your actual logic
     const result = await chatSession.sendMessage(inputPrompt);
     console.log(result.response.text());
+    const response = result.response
+      .text()
+      .replace("```json", "")
+      .replace("```", "");
+    console.log(JSON.parse(response));
+    setJobTitle("");
+    setJobDescription("");
+    setExperience("");
+    setIsOpen(false); // Close the dialog
+    setLoading(false); // Reset the loading state
   };
   return (
     <div className="">
@@ -105,7 +119,16 @@ const AddInterview = () => {
                   />
                 </div>
                 <div className=" flex justify-end gap-2">
-                  <Button type="submit"> Start InterView</Button>
+                  <Button type="submit" disabled={loading}>
+                    {loading ? (
+                      <>
+                        <Loader2Icon className="animate-spin" size={20} />
+                        "Generating..."
+                      </>
+                    ) : (
+                      "Generate Interview Questions"
+                    )}
+                  </Button>
                   <Button
                     type="button"
                     onClick={() => setIsOpen(false)}
