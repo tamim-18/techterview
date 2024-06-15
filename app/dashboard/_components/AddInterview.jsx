@@ -12,20 +12,36 @@ import { Button } from "@/components/ui/button";
 import { Ghost } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { chatSession } from "@/utils/GeminiAI";
 
 const AddInterview = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [jobTitle, setJobTitle] = React.useState();
   const [jobDescription, setJobDescription] = React.useState();
   const [experience, setExperience] = React.useState();
-  const onSubmit = (e) => {
-    e.preventDefault();
+
+  const onSubmit = async (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
     console.log(jobTitle, jobDescription, experience);
+
+    const inputPrompt = `
+      Suppose you are a job interview taker. I will give you Job Title, job description, and years of experience working in the job. Based on the given information, you will give me 5 interview questions with answers. Your response must be in JSON format. Notice that the question and answer should be in the JSON block. Here is an example for you of my input prompt:
+      {
+        "job Title": "${jobTitle}",
+        "Job Description": "${jobDescription}",
+        "Years of experience": "${experience}"
+      }
+    `;
+    // Your logic to handle the prompt goes here
+    // This is just for demonstration, replace with your actual logic
+    const result = await chatSession.sendMessage(inputPrompt);
+    console.log(result.response.text());
   };
   return (
     <div className="">
       <div
         className=" border p-10 rounded-lg  font-bold hover:scale-105 cursor-pointer bg-secondary hover: shadow-md"
+        // onclick event to open the dialog
         onClick={() => setIsOpen(true)}
       >
         <h2 className=" text-center text-lg transition-all">
@@ -39,7 +55,11 @@ const AddInterview = () => {
               Tell us more about your job interviewing
             </DialogTitle>
             <DialogDescription>
-              <form action="" onSubmit={onSubmit}>
+              <form
+                action=""
+                onSubmit={onSubmit}
+                // onSubmit event to submit the form.
+              >
                 <div className=" ">
                   <h2 className="">
                     Tell me about your profile in more details
