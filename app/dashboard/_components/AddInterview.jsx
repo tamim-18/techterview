@@ -13,15 +13,22 @@ import { Ghost, Loader2Icon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { chatSession } from "@/utils/GeminiAI";
-import { json } from "drizzle-orm/mysql-core";
+
 import { set } from "date-fns";
+import { db } from "@/utils/db";
+import { Interview } from "@/utils/schema";
+import { v4 as uuidv4 } from "uuid";
+import { useUser } from "@clerk/nextjs";
+import moment from "moment";
 
 const AddInterview = () => {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = React.useState(false);
   const [jobTitle, setJobTitle] = React.useState("");
   const [jobDescription, setJobDescription] = React.useState("");
   const [experience, setExperience] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [jsonOb, setJsonOb] = React.useState([]);
 
   const onSubmit = async (e) => {
     setLoading(true);
@@ -36,21 +43,52 @@ const AddInterview = () => {
         "Years of experience": "${experience}"
       }
     `;
-    // Your logic to handle the prompt goes here
-    // This is just for demonstration, replace with your actual logic
-    const result = await chatSession.sendMessage(inputPrompt);
-    console.log(result.response.text());
-    const response = result.response
-      .text()
-      .replace("```json", "")
-      .replace("```", "");
-    console.log(JSON.parse(response));
-    setJobTitle("");
-    setJobDescription("");
-    setExperience("");
-    setIsOpen(false); // Close the dialog
-    setLoading(false); // Reset the loading state
+
+    try {
+      // Send the message and get the response
+      const result = await chatSession.sendMessage(inputPrompt);
+      const responseText = await result.response.text(); // Await the text response
+      const jsonResponse = responseText
+        .replace("```json", "")
+        .replace("```", "");
+
+      // Parse the JSON response
+      const parsedResponse = JSON.parse(jsonResponse);
+      console.log(parsedResponse);
+
+      // Update the state with the parsed response
+      setJsonOb(parsedResponse);
+
+      // Insert the data into the database
+      const saveData = await db
+        .insert(Interview)
+        .values({
+          jsonMockResp: jsonResponse, // Use the stringified JSON response
+          jobPosition: jobTitle,
+          jobDesc: jobDescription,
+          jobExperience: experience,
+          createdBy: user?.primaryEmailAddress?.emailAddress,
+          createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+          mockInterviewId: uuidv4(),
+        })
+        .returning({ mockInterviewId: Interview.mockInterviewId });
+      console.log(saveData);
+
+      // Reset the form fields
+      setJobTitle("");
+      setJobDescription("");
+      setExperience("");
+
+      // Close the dialog
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Error", error);
+    } finally {
+      // Reset the loading state
+      setLoading(false);
+    }
   };
+
   return (
     <div className="">
       <div
