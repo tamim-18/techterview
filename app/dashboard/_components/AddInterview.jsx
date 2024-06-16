@@ -19,12 +19,14 @@ import { Interview } from "@/utils/schema";
 import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 
 const AddInterview = () => {
   const { user } = useUser();
   const [isOpen, setIsOpen] = React.useState(false);
   const [jobTitle, setJobTitle] = React.useState("");
   const [jobDescription, setJobDescription] = React.useState("");
+  const router = useRouter();
   const [experience, setExperience] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [jsonOb, setJsonOb] = React.useState([]);
@@ -79,7 +81,10 @@ const AddInterview = () => {
       setExperience("");
 
       // Close the dialog
-      setIsOpen(false);
+      if (saveData) {
+        setIsOpen(false);
+        router.push(`/dashboard/interview/${saveData[0]?.mockInterviewId}`);
+      }
     } catch (error) {
       console.error("Error", error);
     } finally {
