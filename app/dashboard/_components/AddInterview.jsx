@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { chatSession } from "@/utils/GeminiAI";
 
-import { set } from "date-fns";
 import { db } from "@/utils/db";
 import { Interview } from "@/utils/schema";
 import { v4 as uuidv4 } from "uuid";
