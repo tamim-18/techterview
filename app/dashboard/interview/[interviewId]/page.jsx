@@ -26,7 +26,7 @@ const InterViewPage = ({ params }) => {
         .select()
         .from(Interview)
         .where(eq(Interview.mockInterviewId, params.interviewId));
-      //console.log(result);
+
       setInterview(result[0]);
     } catch (error) {
       console.error("Error fetching interview data: ", error);
@@ -40,6 +40,7 @@ const InterViewPage = ({ params }) => {
           <Webcam
             onUserMedia={() => setWebcamEnabled(true)}
             onUserMediaError={() => setWebcamEnabled(false)}
+            mirrored={true}
             style={{
               height: 300,
               width: "100%",
@@ -59,6 +60,20 @@ const InterViewPage = ({ params }) => {
             </Button>
           </div>
         )}
+      </div>
+      <div className=" flex flex-col my-6 gap-5">
+        <h2 className=" text-lg ">
+          <strong>Job Role/Job Position:</strong>
+          {interview.jobPosition}
+        </h2>
+        <h2 className=" text-lg ">
+          <strong>Tech Stack/Job Description:</strong>
+          {interview.jobDesc}
+        </h2>
+        <h2 className=" text-lg ">
+          <strong>Years of Experience:</strong>
+          {interview.jobExperience}
+        </h2>
       </div>
     </div>
   );
