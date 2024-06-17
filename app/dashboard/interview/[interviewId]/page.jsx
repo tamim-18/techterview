@@ -8,7 +8,7 @@ import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 
 const InterViewPage = ({ params }) => {
-  const [interview, setInterview] = React.useState();
+  const [interview, setInterview] = React.useState(null);
   const [webcamEnabled, setWebcamEnabled] = React.useState(false);
   React.useEffect(() => {
     console.log("Params: ", params);
@@ -28,6 +28,7 @@ const InterViewPage = ({ params }) => {
         .where(eq(Interview.mockInterviewId, params.interviewId));
 
       setInterview(result[0]);
+      console.log("data fetched: ", result[0]);
     } catch (error) {
       console.error("Error fetching interview data: ", error);
     }
@@ -64,15 +65,15 @@ const InterViewPage = ({ params }) => {
       <div className=" flex flex-col my-6 gap-5">
         <h2 className=" text-lg ">
           <strong>Job Role/Job Position:</strong>
-          {interview.jobPosition}
+          {interview?.jobPosition}
         </h2>
         <h2 className=" text-lg ">
           <strong>Tech Stack/Job Description:</strong>
-          {interview.jobDesc}
+          {interview?.jobDesc}
         </h2>
         <h2 className=" text-lg ">
           <strong>Years of Experience:</strong>
-          {interview.jobExperience}
+          {interview?.jobExperience}
         </h2>
       </div>
     </div>
