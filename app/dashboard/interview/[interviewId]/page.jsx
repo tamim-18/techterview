@@ -7,6 +7,7 @@ import { WebcamIcon } from "lucide-react";
 import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import { IoIosInformationCircle } from "react-icons/io";
+import Link from "next/link";
 
 const InterViewPage = ({ params }) => {
   const [interview, setInterview] = React.useState(null);
@@ -66,7 +67,7 @@ const InterViewPage = ({ params }) => {
         </div>
         {/* Interview Details */}
         <div className=" flex flex-col my-6 gap-5">
-          <div className=" flex flex-col border p-5 bg-secondary hover:shadow-md transition-all cursor-pointer">
+          <div className=" flex flex-col border p-5 bg-secondary hover:shadow-md transition-all cursor-pointer rounded-md">
             <h2 className=" text-lg ">
               <strong>Job Role/Job Position:</strong>
               {interview?.jobPosition}
@@ -80,7 +81,7 @@ const InterViewPage = ({ params }) => {
               {interview?.jobExperience}
             </h2>
           </div>
-          <div className=" my-3 border rounded-lg p-3 border-yellow-300 bg-yellow-100">
+          <div className=" my-3 border rounded-lg p-3 border-yellow-300 bg-yellow-100 hover:shadow-md">
             <div className=" flex gap-2">
               <IoIosInformationCircle className="text-red-500 h-7 w-5" />{" "}
               <span className=" font-bold text-lg tracking-tighter">
@@ -94,6 +95,11 @@ const InterViewPage = ({ params }) => {
             </p>
           </div>
         </div>
+      </div>
+      <div className=" flex items-end justify-end">
+        <Link href={`/dashboard/interview/${params.interviewId}/start`}>
+          <Button className="py-6 px-10 ">Start</Button>
+        </Link>
       </div>
     </div>
   );
