@@ -80,7 +80,7 @@ const InterViewPage = ({ params }) => {
               {interview?.jobExperience}
             </h2>
           </div>
-          <div className=" my-3">
+          <div className=" my-3 border rounded-lg p-3 border-yellow-300 bg-yellow-100">
             <div className=" flex gap-2">
               <IoIosInformationCircle className="text-red-500 h-7 w-5" />{" "}
               <span className=" font-bold text-lg tracking-tighter">
