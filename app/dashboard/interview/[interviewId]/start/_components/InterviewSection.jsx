@@ -1,7 +1,17 @@
-import { LightbulbIcon } from "lucide-react";
+import { LightbulbIcon, Volume2 } from "lucide-react";
 import React from "react";
 
 const InterviewSection = ({ interViewQuestions, activeQuestion }) => {
+  const textToSpeech = (text) => {
+    if ("speechSynthesis" in window) {
+      const synth = window.speechSynthesis;
+      // Create a new instance of SpeechSynthesisUtterance.
+      const utterThis = new SpeechSynthesisUtterance(text);
+      synth.speak(utterThis);
+    } else {
+      alert("Your browser not supported");
+    }
+  };
   return (
     interViewQuestions && (
       <div className="p-4 sm:p-5 border rounded-lg my-5 shadow-lg bg-white">
@@ -28,6 +38,12 @@ const InterviewSection = ({ interViewQuestions, activeQuestion }) => {
           <p className="text-base sm:text-lg text-gray-700">
             {interViewQuestions[activeQuestion]?.question}
           </p>
+          <Volume2
+            className=" cursor-pointer"
+            onClick={() =>
+              textToSpeech(interViewQuestions[activeQuestion]?.question)
+            }
+          />
         </div>
         <div className=" bg-blue-300 border rounded-lg my-4 p-2">
           <h2 className=" flex gap-2">
