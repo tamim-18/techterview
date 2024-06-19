@@ -5,9 +5,20 @@ import { Interview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import InterviewSection from "./_components/InterviewSection";
 
+// Function to normalize the data
+const normalizeData = (data) => {
+  if (Array.isArray(data.questions)) {
+    return data.questions;
+  } else if (Array.isArray(data.interview_questions)) {
+    return data.interview_questions;
+  }
+  return [];
+};
+
 const StartInterView = ({ params }) => {
   const [interViewData, setInterViewData] = React.useState(null);
   const [interViewQuestions, setInterViewQuestions] = React.useState([]);
+  const [activeQuestion, setActiveQuestion] = React.useState(0);
 
   React.useEffect(() => {
     getInterview();
@@ -27,15 +38,9 @@ const StartInterView = ({ params }) => {
       const jsonResp = JSON.parse(result[0].jsonMockResp);
       console.log("jsonResp: ", jsonResp);
 
-      // Ensure jsonResp.interview_questions is an array
-      if (Array.isArray(jsonResp.interview_questions)) {
-        setInterViewQuestions(jsonResp.interview_questions);
-      } else {
-        console.error(
-          "interview_questions is not an array",
-          jsonResp.interview_questions
-        );
-      }
+      // Normalize the questions data
+      const normalizedQuestions = normalizeData(jsonResp);
+      setInterViewQuestions(normalizedQuestions);
     } catch (error) {
       console.error("Error fetching interview data: ", error);
     }
@@ -44,7 +49,10 @@ const StartInterView = ({ params }) => {
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2">
-        <InterviewSection interViewQuestions={interViewQuestions} />
+        <InterviewSection
+          interViewQuestions={interViewQuestions}
+          activeQuestion={activeQuestion}
+        />
         {/* recording video/audio */}
       </div>
     </div>

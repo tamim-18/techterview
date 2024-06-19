@@ -24,10 +24,10 @@ function Header() {
             Dashboard
           </li>
         </Link>
-        <Link href="/interviews">
+        <Link href="dashboard/interview">
           <li
             className={`font-mono font-bold text-blue-600 hover:text-cyan-500 px-3 py-2 rounded ${
-              pathname === "/interviews"
+              pathname === "/dashboard/interview/"
                 ? "custom-underline custom-underline-transition"
                 : "transition-all duration-300 ease-in-out"
             }`}
