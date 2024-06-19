@@ -1,8 +1,13 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
 import Webcam from "react-webcam";
 import useSpeechToText from "react-hook-speech-to-text";
+import { is } from "drizzle-orm";
+import { Mic } from "lucide-react";
+import { StopCircle } from "lucide-react";
 
 const Record = () => {
   const {
@@ -19,9 +24,26 @@ const Record = () => {
 
   const [client, setClient] = React.useState(false);
   const [webcamActive, setWebcamActive] = React.useState(false);
+  const [userAnswer, setUserAnswer] = React.useState("");
   React.useEffect(() => {
     setClient(true);
   }, []);
+
+  const StartStopRecording = async () => {
+    if (isRecording) {
+      stopSpeechToText();
+    } else {
+      startSpeechToText();
+    }
+  };
+
+  React.useEffect(() => {
+    if (results && results.length > 0) {
+      results.map((result) =>
+        setUserAnswer((prevAnswer) => prevAnswer + result?.transcript)
+      );
+    }
+  }, [results]);
   return (
     <div className=" flex items-center justify-center flex-col">
       <div className=" mt-10 border rounded-lg shadow-md  flex flex-col items-center justify-center p-5 ">
@@ -31,6 +53,7 @@ const Record = () => {
             height="150"
             width="150"
             className="absolute"
+            alt="webcam"
           />
         )}
         {client && (
@@ -46,20 +69,18 @@ const Record = () => {
           />
         )}
       </div>
-      <Button variant="outline" className=" mt-10">
-        {" "}
-        Start Recording
+      <Button variant="outline" className="my-10" onClick={StartStopRecording}>
+        {isRecording ? (
+          <h2 className="text-red-600 animate-pulse flex gap-2 items-center">
+            <StopCircle />
+            Stop Recording
+          </h2>
+        ) : (
+          <h2 className="text-primary flex gap-2 items-center">
+            <Mic /> Record Answer
+          </h2>
+        )}
       </Button>
-      <h1>Recording: {isRecording.toString()}</h1>
-      <button onClick={isRecording ? stopSpeechToText : startSpeechToText}>
-        {isRecording ? "Stop Recording" : "Start Recording"}
-      </button>
-      <ul>
-        {results.map((result) => (
-          <li key={result.timestamp}>{result.transcript}</li>
-        ))}
-        {interimResult && <li>{interimResult}</li>}
-      </ul>
     </div>
   );
 };
