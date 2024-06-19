@@ -4,6 +4,7 @@ import { db } from "@/utils/db";
 import { Interview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import InterviewSection from "./_components/InterviewSection";
+import Record from "./_components/Record";
 
 // Function to normalize the data
 const normalizeData = (data) => {
@@ -54,6 +55,7 @@ const StartInterView = ({ params }) => {
           activeQuestion={activeQuestion}
         />
         {/* recording video/audio */}
+        <Record />
       </div>
     </div>
   );
