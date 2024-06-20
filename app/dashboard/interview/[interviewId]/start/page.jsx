@@ -29,6 +29,7 @@ const StartInterView = ({ params }) => {
     const interviewId = params.interviewId;
 
     try {
+      // Fetch the interview from the database
       const result = await db
         .select()
         .from(Interview)
@@ -55,7 +56,11 @@ const StartInterView = ({ params }) => {
           activeQuestion={activeQuestion}
         />
         {/* recording video/audio */}
-        <Record />
+        <Record
+          interViewQuestions={interViewQuestions}
+          activeQuestion={activeQuestion}
+          interViewData={interViewData}
+        />
       </div>
     </div>
   );
