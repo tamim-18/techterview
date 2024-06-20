@@ -13,6 +13,7 @@ import { db } from "@/utils/db";
 import { UserAnswer } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
+import { toast } from "sonner";
 
 const Record = ({ interViewQuestions, activeQuestion, interViewData }) => {
   // useSpeechToText hook
@@ -90,17 +91,22 @@ const Record = ({ interViewQuestions, activeQuestion, interViewData }) => {
     const jsonResp = text.replace("```json", "").replace("```", "");
     const parsedResponse = JSON.parse(jsonResp);
     console.log("parsedResponse: ", parsedResponse);
-    const res = await db.insert(UserAnswer).values({
-      mockIdRef: interViewData.mockInterviewId,
-      question: interViewQuestions[activeQuestion]?.question,
-      correctAnswer: interViewQuestions[activeQuestion]?.answer,
-      userAnswer: userAnswer,
-      feedback: parsedResponse?.feedback,
-      rating: parsedResponse?.rating,
-      userEmail: user?.primaryEmailAddress?.emailAddress,
-      // moment
-      createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-    });
+    try {
+      const res = await db.insert(UserAnswer).values({
+        mockIdRef: interViewData.mockInterviewId,
+        question: interViewQuestions[activeQuestion]?.question,
+        correctAnswer: interViewQuestions[activeQuestion]?.answer,
+        userAnswer: userAnswer,
+        feedback: parsedResponse?.feedback,
+        rating: parsedResponse?.rating,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        // moment
+        createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+      });
+      toast("Answer submitted successfully", "success");
+    } catch (error) {
+      console.error("Error inserting user answer: ", error);
+    }
   };
   return (
     <div className=" flex items-center justify-center flex-col">

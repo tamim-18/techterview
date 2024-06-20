@@ -5,6 +5,7 @@ import { Interview } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import InterviewSection from "./_components/InterviewSection";
 import Record from "./_components/Record";
+import { Button } from "@/components/ui/button";
 
 // Function to normalize the data
 const normalizeData = (data) => {
@@ -19,7 +20,7 @@ const normalizeData = (data) => {
 const StartInterView = ({ params }) => {
   const [interViewData, setInterViewData] = React.useState(null);
   const [interViewQuestions, setInterViewQuestions] = React.useState([]);
-  const [activeQuestion, setActiveQuestion] = React.useState(0);
+  const [activeQuestion, setActiveQuestion] = React.useState(3);
 
   React.useEffect(() => {
     getInterview();
@@ -61,6 +62,18 @@ const StartInterView = ({ params }) => {
           activeQuestion={activeQuestion}
           interViewData={interViewData}
         />
+      </div>
+      <div className="flex justify-end gap-6 mb-2">
+        {activeQuestion > 0 && (
+          <Button onClick={() => setActiveQuestion(activeQuestion - 1)}>
+            Previous Question
+          </Button>
+        )}
+        {activeQuestion != interViewQuestions?.length - 1 && (
+          <Button onClick={() => setActiveQuestion(activeQuestion + 1)}>
+            Next Question
+          </Button>
+        )}
       </div>
     </div>
   );

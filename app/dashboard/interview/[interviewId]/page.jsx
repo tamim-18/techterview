@@ -30,7 +30,7 @@ const InterViewPage = ({ params }) => {
         .where(eq(Interview.mockInterviewId, params.interviewId));
 
       setInterview(result[0]);
-      console.log("data fetched: ", result[0]);
+      // console.log("data fetched: ", result[0]);
     } catch (error) {
       console.error("Error fetching interview data: ", error);
     }
