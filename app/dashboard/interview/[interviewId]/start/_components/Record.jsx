@@ -14,6 +14,7 @@ import { UserAnswer } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
 import { toast } from "sonner";
+import { set } from "date-fns";
 
 const Record = ({ interViewQuestions, activeQuestion, interViewData }) => {
   // useSpeechToText hook
@@ -104,11 +105,18 @@ const Record = ({ interViewQuestions, activeQuestion, interViewData }) => {
         // moment
         createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       });
-      toast("Answer submitted successfully", "success");
 
-      // Reset the user answer
-      setResults([]);
+      if (res) {
+        toast("Answer submitted successfully", "success");
+
+        // Reset the user answer
+        setUserAnswer("");
+        setResults([]);
+      }
     } catch (error) {
+      setLoading(false);
+      setResults([]);
+      toast("Error submitting answer", "error");
       console.error("Error inserting user answer: ", error);
     }
   };
