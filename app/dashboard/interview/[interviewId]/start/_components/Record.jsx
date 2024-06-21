@@ -22,6 +22,7 @@ const Record = ({ interViewQuestions, activeQuestion, interViewData }) => {
     interimResult,
     isRecording,
     results,
+    setResults,
     startSpeechToText,
     stopSpeechToText,
   } = useSpeechToText({
@@ -104,6 +105,9 @@ const Record = ({ interViewQuestions, activeQuestion, interViewData }) => {
         createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       });
       toast("Answer submitted successfully", "success");
+
+      // Reset the user answer
+      setResults([]);
     } catch (error) {
       console.error("Error inserting user answer: ", error);
     }

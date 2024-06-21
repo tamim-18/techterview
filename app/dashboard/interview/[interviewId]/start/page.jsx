@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 import InterviewSection from "./_components/InterviewSection";
 import Record from "./_components/Record";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 // Function to normalize the data
 const normalizeData = (data) => {
@@ -75,7 +76,9 @@ const StartInterView = ({ params }) => {
           </Button>
         )}
         {activeQuestion == interViewQuestions?.length - 1 && (
-          <Button>Submit</Button>
+          <Link href={`/dashboard/interview/${params.interviewId}/feedback`}>
+            <Button>Submit</Button>
+          </Link>
         )}
       </div>
     </div>
