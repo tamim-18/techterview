@@ -20,7 +20,7 @@ const normalizeData = (data) => {
 const StartInterView = ({ params }) => {
   const [interViewData, setInterViewData] = React.useState(null);
   const [interViewQuestions, setInterViewQuestions] = React.useState([]);
-  const [activeQuestion, setActiveQuestion] = React.useState(3);
+  const [activeQuestion, setActiveQuestion] = React.useState(0);
 
   React.useEffect(() => {
     getInterview();
@@ -73,6 +73,9 @@ const StartInterView = ({ params }) => {
           <Button onClick={() => setActiveQuestion(activeQuestion + 1)}>
             Next Question
           </Button>
+        )}
+        {activeQuestion == interViewQuestions?.length - 1 && (
+          <Button>Submit</Button>
         )}
       </div>
     </div>
