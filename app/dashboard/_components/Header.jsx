@@ -35,10 +35,10 @@ function Header() {
             Interviews
           </li>
         </Link>
-        <Link href="/questions">
+        <Link href="/dashboard/questions">
           <li
             className={`font-mono font-bold text-blue-600 hover:text-cyan-500 px-3 py-2 rounded ${
-              pathname === "/questions"
+              pathname === "/dashboard/questions"
                 ? "custom-underline custom-underline-transition"
                 : "transition-all duration-300 ease-in-out"
             }`}
