@@ -4,7 +4,15 @@ import { UserAnswer } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import React from "react";
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+
 const Feedback = ({ params }) => {
+  const [feedbackList, setFeedbackList] = React.useState([]);
+
   const getFeedback = async () => {
     // fetch the interview data
     const interviewId = params.interviewId;
@@ -14,6 +22,7 @@ const Feedback = ({ params }) => {
         .from(UserAnswer)
         .where(eq(UserAnswer.mockIdRef, interviewId));
       console.log("result: ", result);
+      setFeedbackList(result);
     } catch (error) {
       console.log("Error in fetching from databases");
     }
