@@ -1,5 +1,6 @@
 import React from "react";
 import AddInterview from "./_components/AddInterview";
+import AllInterview from "./_components/AllInterview";
 
 const Dashboard = () => {
   return (
@@ -11,6 +12,8 @@ const Dashboard = () => {
       <div className=" grid grid-cols-1 md:grid-cols-3 my-5">
         <AddInterview />
       </div>
+      {/* All interview list */}
+      <AllInterview />
     </div>
   );
 };
