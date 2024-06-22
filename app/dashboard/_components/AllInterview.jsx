@@ -5,6 +5,7 @@ import { Interview } from "@/utils/schema";
 import { useUser } from "@clerk/nextjs";
 import { desc, eq } from "drizzle-orm";
 import React from "react";
+import InterviewCard from "./InterviewCard";
 
 const AllInterview = () => {
   const { user } = useUser();
@@ -24,7 +25,7 @@ const AllInterview = () => {
         .from(Interview) // Select from the Interview table
         .where(eq(Interview.createdBy, user?.primaryEmailAddress?.emailAddress)) // Filter by the current user
         .orderBy(desc(Interview.id)); // Order by the ID in descending order
-
+      console.log(interviewList);
       setAllInterview(interviewList);
     } catch (e) {
       console.log(e);
@@ -33,7 +34,13 @@ const AllInterview = () => {
   return (
     <div>
       {/* All interview list */}
-      Interview
+      <p className="">
+        The list of all the interview created by the user will be shown here
+      </p>
+      {allInterview &&
+        allInterview.map((interview, idx) => (
+          <InterviewCard key={idx} interview={interview} />
+        ))}
     </div>
   );
 };
