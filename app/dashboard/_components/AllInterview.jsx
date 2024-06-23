@@ -37,10 +37,16 @@ const AllInterview = () => {
       <p className="">
         The list of all the interview created by the user will be shown here
       </p>
-      {allInterview &&
-        allInterview.map((interview, idx) => (
-          <InterviewCard key={idx} interview={interview} />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-3">
+        {allInterview?.length > 0
+          ? allInterview.map((interview, idx) => (
+              <InterviewCard key={idx} interview={interview} />
+            ))
+          : // skeleton
+            [1, 2, 3, 4].map((item, index) => (
+              <div className="h-[100px] w-full bg-gray-200 animate-pulse rounded-lg "></div>
+            ))}
+      </div>
     </div>
   );
 };
