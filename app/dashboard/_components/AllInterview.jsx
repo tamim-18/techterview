@@ -6,48 +6,81 @@ import { useUser } from "@clerk/nextjs";
 import { desc, eq } from "drizzle-orm";
 import React from "react";
 import InterviewCard from "./InterviewCard";
+import { motion } from "framer-motion";
 
 const AllInterview = () => {
   const { user } = useUser();
-  const [allInterview, setAllInterview] = React.useState([]); // State to store all the interview created by the user
+  const [allInterview, setAllInterview] = React.useState([]);
 
-  // get all the interview created by the user
   React.useEffect(() => {
-    // if user exist then get the interview list
     user && getInterviewList();
   }, [user]);
 
   const getInterviewList = async () => {
-    // getting all the interview created by the user
     try {
       const interviewList = await db
         .select()
-        .from(Interview) // Select from the Interview table
-        .where(eq(Interview.createdBy, user?.primaryEmailAddress?.emailAddress)) // Filter by the current user
-        .orderBy(desc(Interview.id)); // Order by the ID in descending order
-      console.log(interviewList);
+        .from(Interview)
+        .where(eq(Interview.createdBy, user?.primaryEmailAddress?.emailAddress))
+        .orderBy(desc(Interview.id));
       setAllInterview(interviewList);
     } catch (e) {
       console.log(e);
     }
   };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+    },
+  };
+
   return (
-    <div>
-      {/* All interview list */}
-      <p className="">
-        The list of all the interview created by the user will be shown here
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-3">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg"
+    >
+      <motion.h1
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold text-indigo-700 mb-6"
+      >
+        Your Interviews
+      </motion.h1>
+      <motion.div
+        variants={containerVariants}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         {allInterview?.length > 0
           ? allInterview.map((interview, idx) => (
-              <InterviewCard key={idx} interview={interview} />
+              <motion.div key={idx} variants={itemVariants}>
+                <InterviewCard interview={interview} />
+              </motion.div>
             ))
-          : // skeleton
-            [1, 2, 3, 4].map((item, index) => (
-              <div className="h-[100px] w-full bg-gray-200 animate-pulse rounded-lg "></div>
+          : [1, 2, 3, 4].map((item, index) => (
+              <motion.div
+                key={index}
+                variants={itemVariants}
+                className="h-[150px] w-full bg-gradient-to-r from-gray-200 to-gray-300 animate-pulse rounded-lg"
+              />
             ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
