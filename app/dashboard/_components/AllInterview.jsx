@@ -24,7 +24,7 @@ const AllInterview = () => {
         .where(eq(Interview.createdBy, user?.primaryEmailAddress?.emailAddress))
         .orderBy(desc(Interview.id));
       setAllInterview(interviewList);
-      clg(interviewList);
+      // clg(interviewList);
     } catch (e) {
       console.log(e);
     }
